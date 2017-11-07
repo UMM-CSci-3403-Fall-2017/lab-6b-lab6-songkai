@@ -1,11 +1,29 @@
 package xrate;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+
 /**
  * Provide access to basic currency exchange rate services.
  * 
  * @author PUT YOUR TEAM NAME HERE
+ * Lab6b-songkai
  */
 public class ExchangeRateReader {
+	 String stringUrl;
+	 URL url;
+	 InputStream xml;
 
     /**
      * Construct an exchange rate reader using the given base URL. All requests
@@ -18,8 +36,9 @@ public class ExchangeRateReader {
      * @param baseURL
      *            the base URL for requests
      */
-    public ExchangeRateReader(String baseURL) {
-        // TODO Your code here
+    public ExchangeRateReader(String baseURL) throws IOException{
+       stringUrl = baseURL;
+        
     }
 
     /**
@@ -39,9 +58,32 @@ public class ExchangeRateReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public float getExchangeRate(String currencyCode, int year, int month, int day) {
-        // TODO Your code here
-        throw new UnsupportedOperationException();
+    public float getExchangeRate(String currencyCode, int year, int month, int day){
+        try{
+        	String monthString;
+        	String dayString;
+        	monthString = month + "";
+        	dayString = day + "";
+        	
+        	if(month < 10){
+        		monthString = "0" + monthString;
+        	}
+        	if (day < 10){
+        		dayString = "0" + dayString;
+        	}
+        	
+        	stringUrl = stringUrl + year + "/" + monthString + "/" + dayString + ".xml";
+        	url = new URL(stringUrl);
+        	xml = url.openStream();
+        	ForXML forXML = new ForXML();
+        			
+        	return 	forXML.getExchangeRate(currencyCode, xml);
+        }catch(UnsupportedOperationException | IOException | ParserConfigurationException | SAXException e){
+        	throw new UnsupportedOperationException();
+        }
+    	
+    	
+        
     }
 
     /**
@@ -61,10 +103,30 @@ public class ExchangeRateReader {
      * @throws ParserConfigurationException
      * @throws SAXException
      */
-    public float getExchangeRate(
-            String fromCurrency, String toCurrency,
-            int year, int month, int day) {
-        // TODO Your code here
-        throw new UnsupportedOperationException();
+    public float getExchangeRate(String fromCurrency, String toCurrency,int year, int month, int day) {
+    	try{
+        	String monthString;
+        	String dayString;
+        	monthString = month + "";
+        	dayString = day + "";
+        	
+        	if(month < 10){
+        		monthString = "0" + monthString;
+        	}
+        	if (day < 10){
+        		dayString = "0" + dayString;
+        	}
+        	
+        	stringUrl = stringUrl + year + "/" + monthString + "/" + dayString + ".xml";
+        	url = new URL(stringUrl);
+        	xml = url.openStream();
+        	ForXML forXML = new ForXML();
+        			
+        	return 	forXML.getExchangeRate(fromCurrency, toCurrency, xml);
+        }catch(UnsupportedOperationException | IOException | ParserConfigurationException | SAXException e){
+        	throw new UnsupportedOperationException();
+        }
+    	
+        
     }
 }
